@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+pnpm-lock.yaml
 
 # testing
 /coverage
@@ -27,11 +28,15 @@ yarn-error.log*
 # local env files
 *.env*
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
+# Drizzle
+.drizzle
+
+# Next.js
+.next
+
+# vercel
 .vercel
