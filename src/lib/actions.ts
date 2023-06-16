@@ -146,7 +146,7 @@ export async function verifyAuthenticationResponse({ credential }: { credential:
   const verification = await SimpleWebAuthnServer.verifyAuthenticationResponse({
     response: credential,
     expectedChallenge: clientData.challenge,
-    expectedOrigin: "http://localhost:3000",
+    expectedOrigin: RP_ID === "localhost" ? "http://localhost:3000" : `https://${RP_ID}`,
     expectedRPID: "localhost",
     authenticator: usedCredential,
   });
