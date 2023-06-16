@@ -39,7 +39,7 @@ const mainNav = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="">
+    <html lang="en" className="dark">
       <body className={cn("flex min-h-screen flex-col bg-background font-sans antialiased", inter.variable)}>
         <header className="container z-40 bg-background">
           <nav>

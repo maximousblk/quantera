@@ -1,8 +1,8 @@
 "use client";
 
-import { useSignal, useSignalEffect } from "@preact/signals-react";
-import { useRouter } from "next/navigation";
-// import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { useEffect, useState } from "react";
+
+import { checkPasskeysSupported, cn } from "@/lib/utils";
 import {
   browserSupportsWebAuthn,
   platformAuthenticatorIsAvailable,
@@ -24,7 +24,7 @@ import { buttonVariants } from "@/components/button";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 
-import { LuComponent } from "react-icons/lu";
+import { LuComponent, LuFingerprint } from "react-icons/lu";
 import { Verified } from "lucide-react";
 
 function daisyLog<T>(params: T) {
@@ -68,16 +68,14 @@ const formTabs = {
 };
 
 export default function Login() {
-  const router = useRouter();
+  const [isPasskeysSupported, setPasskeysSupported] = useState<boolean>(false);
+  const [currentTab, setCurrentTab] = useState<"login" | "register">("register");
+  const [nickname, setNickname] = useState<string>("");
 
-  const isPasskeysSupported = useSignal<boolean>(false);
-  const currentTab = useSignal<"login" | "register">("register");
-  const nickname = useSignal<string>("");
-
-  useSignalEffect(() => {
+  useEffect(() => {
     (async () => {
-      const support = browserSupportsWebAuthn() && (await platformAuthenticatorIsAvailable()) && (await browserSupportsWebAuthnAutofill());
-      isPasskeysSupported.value = support;
+      const support = await checkPasskeysSupported();
+      setPasskeysSupported(support);
 
       if (support) {
         console.log("Passkeys are supported");
@@ -93,65 +91,67 @@ export default function Login() {
         console.log("Started authentication");
       }
     })();
-  });
+  }, []);
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center space-y-8">
       <div className="flex flex-col space-y-4 text-center">
         <LuComponent className="mx-auto h-6 w-6" />
-        <h1 className="text-2xl font-bold tracking-tight">{formTabs[currentTab.value].greeting}</h1>
-        <p className="text-sm text-muted-foreground">Passkeys are {isPasskeysSupported.value ? "supported ✅" : "not supported ❌"}</p>
+        <h1 className="text-2xl font-bold tracking-tight">{formTabs[currentTab].greeting}</h1>
+        <p className="text-sm text-muted-foreground">Passkeys are {isPasskeysSupported ? "supported ✅" : "not supported ❌"}</p>
       </div>
       <Tabs
         defaultValue="register"
         className="w-[24rem]"
         onValueChange={(value) => {
-          currentTab.value = value as any;
+          setCurrentTab(value as "login" | "register");
         }}
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="register">Register</TabsTrigger>
           <TabsTrigger value="login">Login</TabsTrigger>
         </TabsList>
-        <TabsContent value={currentTab.value}>
+        <TabsContent value={currentTab}>
           <Card>
             <form>
               <fieldset disabled={!isPasskeysSupported} className="flex flex-col">
                 <CardHeader>
                   <legend className="flex flex-col space-y-2">
-                    <CardTitle>{formTabs[currentTab.value].title}</CardTitle>
-                    <CardDescription>{formTabs[currentTab.value].instructions}</CardDescription>
+                    <CardTitle>{formTabs[currentTab].title}</CardTitle>
+                    <CardDescription>{formTabs[currentTab].instructions}</CardDescription>
                   </legend>
                 </CardHeader>
 
                 <CardContent className="flex flex-col space-y-4">
                   <Label htmlFor="nickname">Nickname</Label>
                   <Input
-                    type="email"
+                    type="text"
                     id="nickname"
                     onChange={(e) => {
-                      nickname.value = e.target.value;
+                      setNickname(e.target.value);
                     }}
                     placeholder="Luke"
                     autoComplete="username webauthn"
                     required
                   />
 
-                  <input
-                    type="button"
-                    onClick={() => {
-                      formTabs[currentTab.value]
-                        .action({ nickname: nickname.value })
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      formTabs[currentTab]
+                        .action({ nickname })
                         .then(daisyLog)
                         .then((verified) => {
                           if (verified) {
-                            router.refresh();
                           }
                         });
                     }}
-                    value={formTabs[currentTab.value].title}
-                    className={buttonVariants()}
-                  />
+                    className={cn(buttonVariants(), "flex space-x-2")}
+                  >
+                    <LuFingerprint className="h-5 w-5" />
+                    <span>{formTabs[currentTab].title}</span>
+                  </button>
                 </CardContent>
               </fieldset>
             </form>

@@ -67,7 +67,7 @@ const features = [
   },
   {
     title: "Signals",
-    description: "Performant State Management that the cool kids are using",
+    description: "Signals are broken on Next.js",
     href: "https://github.com/preactjs/signals",
     icon: <RiSignalTowerLine className="h-12 w-12" />,
   },
