@@ -79,7 +79,7 @@ export async function verifyRegistrationResponse({
     response: credential,
     expectedChallenge: clientData.challenge,
     expectedRPID: RP_ID,
-    expectedOrigin: process.env.VERCEL_ENV ? `https://${RP_ID}` : `http://localhost:3000`,
+    expectedOrigin: process.env.VERCEL !== undefined ? `https://${RP_ID}` : `http://${RP_ID}`,
     requireUserVerification: true,
   });
   console.log({ verification });
