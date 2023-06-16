@@ -8,8 +8,8 @@ import type * as SimpleWebAuthnTypes from "@simplewebauthn/typescript-types";
 import { eq } from "drizzle-orm";
 import { SignJWT, jwtVerify } from "jose";
 
-const RP_NAME = "Passkeys Demo";
-const RP_ID = "localhost";
+const RP_NAME = "Quantera";
+const RP_ID = (process.env.VERCEL_ENV === "production" ? "quantera.maximousblk.me" : process.env.VERCEL_URL) || "localhost";
 const SECRET = new TextEncoder().encode(process.env.NODE_ENV === "production" ? process.env.JWT_SECRET! : "development");
 
 function generateJWT(userId: string) {
@@ -79,7 +79,7 @@ export async function verifyRegistrationResponse({
     response: credential,
     expectedChallenge: clientData.challenge,
     expectedRPID: RP_ID,
-    expectedOrigin: "http://localhost:3000",
+    expectedOrigin: process.env.VERCEL_ENV ? `https://${RP_ID}` : `http://localhost:3000`,
     requireUserVerification: true,
   });
   console.log({ verification });
