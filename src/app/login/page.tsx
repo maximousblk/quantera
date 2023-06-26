@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 
 import { checkPasskeysSupported, cn } from "@/lib/utils";
 import {
-  browserSupportsWebAuthn,
-  platformAuthenticatorIsAvailable,
-  browserSupportsWebAuthnAutofill,
   startAuthentication,
   startRegistration,
 } from "@simplewebauthn/browser";

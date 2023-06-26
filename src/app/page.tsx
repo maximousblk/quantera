@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/button";
 
 import { LuCheck, LuHeart } from "react-icons/lu";
-import { RiSignalTowerLine } from "react-icons/ri";
 
 import PostgresIcon from "@/assets/pg";
 import PasskeysIcon from "@/assets/passkeys";
 import DrizzleIcon from "@/assets/drizzle";
 import NextjsIcon from "@/assets/nextjs";
+import MillionIcon from "@/assets/million";
 
 const REPO = "maximousblk/maximousblk";
 
@@ -61,15 +61,15 @@ const features = [
   },
   {
     title: "Next.js 13",
-    description: "App dir, React Server Components, Server Actions.",
+    description: "App Router, React Server Components, Server Actions.",
     href: "https://nextjs.org/",
     icon: <NextjsIcon />,
   },
   {
-    title: "Signals",
-    description: "Signals are broken on Next.js",
-    href: "https://github.com/preactjs/signals",
-    icon: <RiSignalTowerLine className="h-12 w-12" />,
+    title: "Million.js",
+    description: "The Virtual DOM Replacement for React. Make React 70% faster.",
+    href: "https://million.dev/",
+    icon: <MillionIcon />,
   },
 ];
 
@@ -83,7 +83,9 @@ export default async function Home() {
           <Link href={`https://github.com/${REPO}`} className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium" target="_blank">
             Follow along on GitHub
           </Link>
-          <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">An example app made for learning new tech.</h1>
+          <h1 className="text-4xl font-bold !leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            An example app made for learning new tech.
+          </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
             There were a lot of new tech i wanted to try out so made this app to learn and experiment with them.
           </p>
