@@ -147,7 +147,7 @@ export async function verifyAuthenticationResponse({ credential }: { credential:
     response: credential,
     expectedChallenge: clientData.challenge,
     expectedOrigin: RP_ID === "localhost" ? "http://localhost:3000" : `https://${RP_ID}`,
-    expectedRPID: "localhost",
+    expectedRPID: RP_ID,
     authenticator: usedCredential,
   });
   console.log({ verification });
